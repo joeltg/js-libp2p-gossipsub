@@ -721,7 +721,10 @@ export class GossipSub extends EventEmitter<GossipsubEvents> implements PubSub<G
    */
   private onPeerDisconnected(peerId: PeerId): void {
     this.log('connection ended %p', peerId)
-    this.removePeer(peerId)
+    const connections = this.components.connectionManager.getConnections(peerId)
+    if (connections.length === 0) {
+      this.removePeer(peerId)
+    }
   }
 
   private async createOutboundStream(peerId: PeerId, connection: Connection): Promise<void> {
