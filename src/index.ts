@@ -638,6 +638,8 @@ export class GossipSub extends EventEmitter<GossipsubEvents> implements PubSub<G
     const registrar = this.components.registrar
     registrarTopologyIds.forEach((id) => registrar.unregister(id))
 
+    await Promise.all(this.multicodecs.map((multicodec) => registrar.unhandle(multicodec)))
+
     this.outboundInflightQueue.end()
 
     for (const outboundStream of this.streamsOutbound.values()) {
